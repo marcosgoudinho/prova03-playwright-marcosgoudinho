@@ -23,7 +23,7 @@ jobs:
     - run: npx playwright install      
     - run: npm run actions  
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}       
+        ZEROSTEP_TOKEN: ${{ secrets.ZEROSTEP_TOKEN }}       
 
   sonarcloud:
     name: Run SonarCloud
