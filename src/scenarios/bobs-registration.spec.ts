@@ -1,6 +1,5 @@
-// src/scenarios/bobs-registration.spec.ts
 import { test, expect } from '@playwright/test';
-import { ai } from '@zerostep/playwright'; // Alterado para o novo import
+import { ai } from '@zerostep/playwright';
 
 const REGISTRATION_URL = 'https://sso.bobs.com.br/auth/realms/bobs/login-actions/registration?client_id=portal&tab_id=bRhY8x2kde8';
 
@@ -37,12 +36,9 @@ test.describe('Formulário de Registro Bob\'s', () => {
     await expect(page.locator('#kc-terms-error')).toHaveText('Você deve concordar com os termos');
   });
 
-  // --- Caso 3 reescrito com o novo padrão ---
-  test('Caso 3: Deve registrar um novo usuário utilizando Zerostep AI', async ({ page, test }) => {
-    // O novo padrão requer que 'page' e 'test' sejam passados
-    const aiArgs = { page, test };
-
-    // O beforeEach já faz o 'goto', então a primeira linha não é mais necessária
+  test('Caso 3: Deve registrar um novo usuário utilizando Zerostep AI', async ({ page }) => { // Removido 'test' dos parâmetros
+    
+    const aiArgs = { page, test }; 
 
     await ai('preencha o campo "Nome completo" com "Meu Nome"', aiArgs);
     await ai('preencha o campo "E-mail" com "meuemail@zerostep.ai"', aiArgs);
