@@ -1,6 +1,6 @@
 // src/scenarios/bobs-registration.spec.ts
 import { test, expect } from '@playwright/test';
-import { zerostep } from 'zerostep';
+import { ai } from '@zerostep/playwright'; // Alterado para o novo import
 
 const REGISTRATION_URL = 'https://sso.bobs.com.br/auth/realms/bobs/login-actions/registration?client_id=portal&tab_id=bRhY8x2kde8';
 
@@ -37,19 +37,23 @@ test.describe('Formulário de Registro Bob\'s', () => {
     await expect(page.locator('#kc-terms-error')).toHaveText('Você deve concordar com os termos');
   });
 
-  test('Caso 3: Deve registrar um novo usuário utilizando Zerostep AI', async ({ page }) => {
-    await zerostep(page).goto('o formulário de registro do Bob\'s');
-    
-    await zerostep(page).type('Meu Nome', 'Nome completo');
-    await zerostep(page).type('meuemail@zerostep.ai', 'E-mail');
-    await zerostep(page).type('11912345678', 'Celular');
-    await zerostep(page).type('Zerostep123!', 'Senha');
-    await zerostep(page).type('Zerostep123!', 'Confirmar Senha');
-    await zerostep(page).type('00000000000', 'CPF'); 
-    await zerostep(page).click('Li e concordo com os Termos de Uso e Política de Privacidade.'); 
-    await zerostep(page).click('Registrar');
+  // --- Caso 3 reescrito com o novo padrão ---
+  test('Caso 3: Deve registrar um novo usuário utilizando Zerostep AI', async ({ page, test }) => {
+    // O novo padrão requer que 'page' e 'test' sejam passados
+    const aiArgs = { page, test };
 
-    await zerostep(page).expect('a URL deve mudar para a página de login ou uma página de sucesso');
+    // O beforeEach já faz o 'goto', então a primeira linha não é mais necessária
+
+    await ai('preencha o campo "Nome completo" com "Meu Nome"', aiArgs);
+    await ai('preencha o campo "E-mail" com "meuemail@zerostep.ai"', aiArgs);
+    await ai('preencha o campo "Celular" com "11912345678"', aiArgs);
+    await ai('preencha o campo "Senha" com "Zerostep123!"', aiArgs);
+    await ai('preencha o campo "Confirmar Senha" com "Zerostep123!"', aiArgs);
+    await ai('preencha o campo "CPF" com "00000000000"', aiArgs);
+    await ai('clique no checkbox "Li e concordo com os Termos de Uso e Política de Privacidade."', aiArgs);
+    await ai('clique no botão "Registrar"', aiArgs);
+
+    await ai('verifique se a URL mudou para uma página de login ou sucesso', aiArgs);
   });
 
 });
